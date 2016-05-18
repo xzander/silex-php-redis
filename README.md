@@ -7,6 +7,12 @@ Installation
 Create (or add to your) composer.json in your projects root-directory::
 
     {
+        "repositories": [
+            {
+                "type": "vcs",
+                "url": "https://github.com/xzander/silex-php-redis"
+            }
+        ],
         "require": {
             "leongkui/silex-php-redis": "*"
         }
