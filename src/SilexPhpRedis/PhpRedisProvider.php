@@ -2,29 +2,50 @@
 
 namespace SilexPhpRedis;
 
-use Silex\Application;
-use Silex\ServiceProviderInterface;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
 
 class PhpRedisProvider implements ServiceProviderInterface
 {
-    public function boot(Application $app)
+    const REDIS = 'redis';
+    const REDIS_OPTIONS = 'redis.options';
+
+    const OPT_HOST = 'host';
+    const OPT_PORT = 'port';
+    const OPT_TIMEOUT = 'timeout';
+    const OPT_PERSISTENT = 'persistent';
+    const OPT_AUTH = 'auth';
+    const OPT_SERIALIZER_IG_BINARY = 'serializer.igbinary';
+    const OPT_SERIALIZER_PHP = 'serializer.php';
+    const OPT_PREFIX = 'prefix';
+    const OPT_DATABASE = 'database';
+
+    protected static $defaultOptions = array(
+        self::OPT_HOST => array(),
+        self::OPT_PORT => 6379,
+    );
+
+    public function boot(Container $app)
     {
 
     }
 
-    public function register(Application $app)
+    public function register(Container $container)
     {
-        $app['redis'] = $app->share(function () use ($app) {
+        $defaultOptions = self::$defaultOptions;
+
+        $container['redis'] = function () use ($container, $defaultOptions) {
+            $options = array_merge($defaultOptions, $container[PhpRedisProvider::REDIS_OPTIONS]);
             $thisRedis = new \Redis();
-            $host = isset($app['redis.host']) ? $app['redis.host'] : array();
-            $port = isset($app['redis.port']) && is_int($app['redis.port']) ? $app['redis.port'] : 6379;
-            $timeout = isset($app['redis.timeout']) && is_int($app['redis.timeout']) ? $app['redis.timeout'] : 0;
-            $persistent = isset($app['redis.persistent']) ? $app['redis.persistent'] : false;
-            $auth = isset($app['redis.auth']) ? $app['redis.auth'] : null;
-            $serializerIgbinary = isset($app['redis.serializer.igbinary']) ? $app['redis.serializer.igbinary'] : false;
-            $serializerPhp = isset($app['redis.serializer.php']) ? $app['redis.serializer.php'] : false;
-            $prefix = isset($app['redis.prefix']) ? $app['redis.prefix'] : null;
-            $database = isset($app['redis.database']) ? $app['redis.database'] : null;
+            $host = isset($options[PhpRedisProvider::OPT_HOST]) ? $options[PhpRedisProvider::OPT_HOST] : array();
+            $port = isset($options[PhpRedisProvider::OPT_PORT]) && is_int($options[PhpRedisProvider::OPT_PORT]) ? $options[PhpRedisProvider::OPT_PORT] : 6379;
+            $timeout = isset($options[PhpRedisProvider::OPT_TIMEOUT]) && is_int($options[PhpRedisProvider::OPT_TIMEOUT]) ? $options[PhpRedisProvider::OPT_TIMEOUT] : 0;
+            $persistent = isset($options[PhpRedisProvider::OPT_PERSISTENT]) ? $options[PhpRedisProvider::OPT_PERSISTENT] : false;
+            $auth = isset($options[PhpRedisProvider::OPT_AUTH]) ? $options[PhpRedisProvider::OPT_AUTH] : null;
+            $serializerIgbinary = isset($options[PhpRedisProvider::OPT_SERIALIZER_IG_BINARY]) ? $options[PhpRedisProvider::OPT_SERIALIZER_IG_BINARY] : false;
+            $serializerPhp = isset($options[PhpRedisProvider::OPT_SERIALIZER_PHP]) ? $options[PhpRedisProvider::OPT_SERIALIZER_PHP] : false;
+            $prefix = isset($options[PhpRedisProvider::OPT_PREFIX]) ? $options[PhpRedisProvider::OPT_PREFIX] : null;
+            $database = isset($options[PhpRedisProvider::OPT_DATABASE]) ? $options[PhpRedisProvider::OPT_DATABASE] : null;
 
             if ($persistent) {
                 $thisRedis->pconnect($host, $port, $timeout);
@@ -53,6 +74,6 @@ class PhpRedisProvider implements ServiceProviderInterface
             }
 
             return $thisRedis;
-        });
+        };
     }
 }
