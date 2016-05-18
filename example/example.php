@@ -21,7 +21,7 @@ $app->register(new PhpRedisProvider(), array(
 
 /** routes **/
 $app->get('/', function () use ($app) {
-    return var_export($app['redis']->info(), true);
+    return var_export($app[PhpRedisProvider::REDIS]->info(), true);
 });
 
 /** run application **/

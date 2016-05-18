@@ -34,7 +34,7 @@ class PhpRedisProvider implements ServiceProviderInterface
     {
         $defaultOptions = self::$defaultOptions;
 
-        $container['redis'] = function () use ($container, $defaultOptions) {
+        $container[self::REDIS] = function () use ($container, $defaultOptions) {
             $options = array_merge($defaultOptions, $container[PhpRedisProvider::REDIS_OPTIONS]);
             $thisRedis = new \Redis();
             $host = isset($options[PhpRedisProvider::OPT_HOST]) ? $options[PhpRedisProvider::OPT_HOST] : array();
