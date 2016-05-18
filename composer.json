@@ -5,7 +5,7 @@
     "homepage": "https://github.com/leongkui/silex-php-redis",
     "type": "library",
     "license": "MIT",
-    "version": "dev",
+    "version": "0.1",
     "authors": [
         {
             "name": "Lim Leong Kui",
@@ -20,6 +20,5 @@
         "psr-0": {
             "SilexPhpRedis": "src"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }
