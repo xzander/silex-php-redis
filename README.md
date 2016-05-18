@@ -14,7 +14,7 @@ Create (or add to your) composer.json in your projects root-directory::
             }
         ],
         "require": {
-            "leongkui/silex-php-redis": "*"
+            "leongkui/silex-php-redis": "dev-master"
         }
     }
 
