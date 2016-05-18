@@ -2,17 +2,21 @@
 
 require __DIR__.'/../vendor/autoload.php';
 
+use SilexPhpRedis\PhpRedisProvider;
+
 $app = new Silex\Application();
 
-$app->register(new SilexPhpRedis\PhpRedisProvider(), array(
-    'redis.host' => '127.0.0.1',
-    'redis.port' => 6379,
-    'redis.timeout' => 30,
-    'redis.persistent' => true,
-    'redis.serializer.igbinary' => false, // use igBinary serialize/unserialize
-    'redis.serializer.php' => false, // use built-in serialize/unserialize
-    'redis.prefix' => 'myprefix',
-    'redis.database' => '0'
+$app->register(new PhpRedisProvider(), array(
+    PhpRedisProvider::REDIS_OPTIONS => array(
+        PhpRedisProvider::OPT_HOST => '127.0.0.1',
+        PhpRedisProvider::OPT_PORT => 6379,
+        PhpRedisProvider::OPT_TIMEOUT => 30,
+        PhpRedisProvider::OPT_PERSISTENT => true,
+        PhpRedisProvider::OPT_SERIALIZER_IG_BINARY => false, // use igBinary serialize/unserialize
+        PhpRedisProvider::OPT_SERIALIZER_PHP => false, // use built-in serialize/unserialize
+        PhpRedisProvider::OPT_PREFIX => 'myprefix',
+        PhpRedisProvider::OPT_DATABASE => '0'
+    )
 ));
 
 /** routes **/
